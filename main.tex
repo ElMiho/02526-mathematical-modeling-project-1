@@ -1,8 +1,11 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{mathtools}
+\usepackage{a4wide}
 
-\title{Exercise 1}
-\author{Hugo (s214734)}
+\title{Optic flow}
+\author{Hugo (s214734) \and Mikael H. Hoffmann (s214753) \and (s211469) \and (s194572)}
 \date{\today}
 
 \begin{document}
@@ -10,9 +13,43 @@
 \maketitle
 
 \section{Introduction}
+Optical flow is a method to determine object motion in video, based on the relative displacement of pixels
+through time in the video. To obtain such a motion prediction, a few strong assumptions are made
+about the subject video, including:
+\begin{itemize}
+    \item There has been only a small displacement through time
+    \item There are no changes in the lighting
+    \item ???
+\end{itemize}
+These assumptions are necessary for applying a mathematical model to the problem of optic flow.
 
 
 
+
+
+
+
+
+
+
+
+\section{Exercise (5)}
+Define $A$ as per equation (2) in the handout:
+\begin{equation}
+    A = \begin{bmatrix}
+    \vdots & \vdots \\
+    V_{x}(p_i) & V_{y}(p_i) \\
+    \vdots & \vdots
+    \end{bmatrix}
+\end{equation}
+Then the normal equation to $Ax = b$ will have the system matrix (where $N$ denotes the considered neighborhood):
+\begin{equation}
+    A^\intercal A = \begin{bmatrix}
+        \sum_{i \in N} V_{x}(p_i)^{2} & \sum_{i \in N} V_{x}(p_i)V_{y}(p_i) \\
+        \sum_{i \in N} V_{x}(p_i)V_{y}(p_i) & \sum_{i \in N} V_{y}(p_i)^{2}
+    \end{bmatrix}
+\end{equation}
+Which we could also get by passing a filter of all ones over $N$ in $V_x$ and $V_y$.
 
 
 
