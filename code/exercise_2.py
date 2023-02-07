@@ -1,12 +1,25 @@
 # Imports
 import numpy as np
 import scipy
+import scipy.ndimage
+import matplotlib.image as mpimg
 
 from typing import List
 
 ###############
 # Problem 2.1 #
 ###############
+testMatrix = np.array(
+    [
+        [[1,2,3,4],
+        [1,2,3,3],
+        [1,2,3,1],
+        [1,2,3,2]],
+        [[1,2,3,4],
+        [1,2,3,3],
+        [1,2,3,1],
+        [1,2,3,2]]
+    ])
 
 def calculate_Vx_LL(flattened_image_vector: np.ndarray, length: int, width: int) -> np.ndarray:
     """
@@ -98,7 +111,10 @@ def calculate_Vy_SGF(image_vector: np.ndarray, depth: int, kernel:np.ndarray = N
 
     if kernel is None:
         # Use prewitt kernel as default
-        kernel = np.asarray([[[1,1,1],[0,0,0],[-1,-1,-1]] for _ in range(depth)])
+        kernel = np.asarray([[
+            [1,1,1],
+            [0,0,0],
+            [-1,-1,-1]] for _ in range(depth)])
     
     Vy = scipy.ndimage.convolve(image_vector, kernel, mode="constant", cval=0.0)
 
@@ -117,7 +133,7 @@ def calculate_Vt_SGF(image_vector: np.ndarray, kernel:np.ndarray = None) -> np.n
 
     # Reshape (depth, height, width) ---> (width, height, depth)
     depth, height, width = image_vector.shape
-    image_vector = np.transpose(image_vector, (2, 1, 0))
+    #image_vector = np.transpose(image_vector, (2, 1, 0))
 
     # Generate kernel
     if kernel is None:
