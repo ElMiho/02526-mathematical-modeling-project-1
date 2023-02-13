@@ -3,6 +3,8 @@
 \usepackage{amsmath, amssymb}
 \usepackage{mathtools}
 \usepackage{a4wide}
+\usepackage{appendix}
+\usepackage{listings}
 
 \title{Optic flow}
 \author{Hugo (s214734) \and Mikael H. Hoffmann (s214753) \and (s211469) \and (s194572)}
@@ -12,7 +14,7 @@
 
 \maketitle
 
-\section{Introduction}
+\section{Introduction (problem and background)}
 Optical flow is a method to determine object motion in video, based on the relative displacement of pixels
 through time in the video. To obtain such a motion prediction, a few strong assumptions are made
 about the subject video, including:
@@ -24,9 +26,64 @@ about the subject video, including:
 These assumptions are necessary for applying a mathematical model to the problem of optic flow.
 
 
+\section{Data and experiments}
 
+\section{Mathematical model and image processing methodology}
+We start by considering the point $\boldsymbol{p} = [p_x, p_y, p_t]$ and we want to find vector $\boldsymbol{u} = [x, y, 1]$ which represents the movement of the above mentioned pixel in \emph{one} time frame, which is given by
 
+\begin{equation}\label{eq:initial-equation}
+    \boldsymbol{V(p + u)} - \boldsymbol{V(p)} = 0.
+\end{equation}
 
+Here $\boldsymbol{V}$ represents a brightness constancy constraint. 
+
+If the displacement is small then it is possible to do a first order Taylor expansion
+
+\begin{equation}
+    \boldsymbol{V(p + u)} = \boldsymbol{V(p)} + \begin{bmatrix}
+        \boldsymbol{V}_x(\boldsymbol{p}) & \boldsymbol{V}_y(\boldsymbol{p}) & \boldsymbol{V}_t(\boldsymbol{p})
+    \end{bmatrix} \boldsymbol{u}.
+\end{equation}
+
+Inserting this in equation \ref{eq:initial-equation} then
+
+\begin{equation}
+    \begin{split}
+        \boldsymbol{V(p)} + \begin{bmatrix}
+        \boldsymbol{V}_x(\boldsymbol{p}) & \boldsymbol{V}_y(\boldsymbol{p}) & \boldsymbol{V}_t(\boldsymbol{p})
+        \end{bmatrix} \boldsymbol{u} - \boldsymbol{V(p)} &= \boldsymbol{V}_x(\boldsymbol{p}) x + \boldsymbol{V}_y(\boldsymbol{p}) y + \boldsymbol{V}_t(\boldsymbol{p}) \cdot 1 \\
+        &= 0,
+    \end{split}
+\end{equation}
+
+and rearranging yields
+
+\begin{equation}
+    \boldsymbol{V}_x(\boldsymbol{p}) x + \boldsymbol{V}_y(\boldsymbol{p}) y = -\boldsymbol{V}_t(\boldsymbol{p}).
+\end{equation}
+
+Since there is two unknowns and one equation it is not possible to determine a solution - therefore we assume that all pixels, in a small area around $\boldsymbol{p}$, moves in the same way, and therefore we get the overdetermined system
+
+\begin{equation}
+    \begin{bmatrix}
+        \vdots & \vdots \\
+        \boldsymbol{V}_x(\boldsymbol{p}_i) & \boldsymbol{V}_y(\boldsymbol{p}_i) \\
+        \vdots & \vdots
+    \end{bmatrix} \begin{bmatrix}
+        x \\ y
+    \end{bmatrix}
+    = - \begin{bmatrix}
+        \vdots \\ \boldsymbol{V}_t(\boldsymbol{p}_i) \\ \vdots
+    \end{bmatrix}.
+\end{equation}
+
+IMAGE PROCESSING METHODOLOGY???
+
+\section{Visualise results}
+
+\section{Discuss results}
+
+\section{Conclude}
 
 
 
@@ -51,7 +108,17 @@ Then the normal equation to $Ax = b$ will have the system matrix (where $N$ deno
 \end{equation}
 Which we could also get by passing a filter of all ones over $N$ in $V_x$ and $V_y$.
 
+\newpage
+\appendix
+\section{Code}
+\subsection{Exercise 1}
+\lstinputlisting[language=Python,breaklines=true]{code/exercise_1.py}
 
+\subsection{Exercise 2}
+\lstinputlisting[language=Python,breaklines=true]{code/exercise_2.py}
+
+\subsection{Exercise 3}
+\lstinputlisting[language=Python,breaklines=true]{code/exercise_3.py}
 
 
 \end{document}
