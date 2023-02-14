@@ -1,14 +1,10 @@
 import matplotlib.pyplot as plt
-import PIL
-from functions import *
-
 import numpy as np
+import PIL
 
-# importing movie py libraries
-from moviepy.editor import VideoClip
-from moviepy.video.io.bindings import mplfig_to_npimage
-
+from video_plotter import save_video
 import functions
+
 # Import image
 images = []
 for i in range(1, 65):
@@ -20,61 +16,13 @@ for i in range(1, 65):
     images.append(image)
     
 # Calculate optic flow for all frames
-interval = 5      # How many optical flow vectors to calculate
+interval = 5        # How many optical flow vectors to calculate
 n = 3               # Size of neighboorhood in Lucas-Kanade method
 opticFlowX, opticFlowY = functions.optical_flow(np.asarray(images), interval, n)
 
 frameNr = 3
 for i in range(63):
-    plotVectorField(np.asarray(images[i]), opticFlowX[i], opticFlowY[i], i)
-
-# print(functions.plotVectorField(images[i],opticFlowX[i],opticFlowY[i],i).shape)
-# for i in range(64):
-#     plotVectorField(images[i],opticFlowX[i],opticFlowY[i],i)
-
-# MOVIE STUFF 
-# numpy array
-# x = np.linspace(-2, 2, 200)
+    functions.plotVectorField(np.asarray(images[i]), opticFlowX[i], opticFlowY[i], i)
 
 
-# duration of the video and the FPS
-duration = 5
-FPS = 10
-
-# matplot subplot
-fig, ax = plt.subplots()
- 
-# method to get frames
-def make_frame(time):
-    # clear
-    ax.clear()
-     
-    frame = int(time*FPS)
-
-    # plotting line
-    #ax.imshow(images[frame], cmap="gray")
-     
-    # plotting just vector field
-    idx_x = np.arange(256)
-    idx_y = np.arange(256)
-    idx_x,idx_y = np.meshgrid(idx_x, idx_y)
-    
-    #Ignore all nonzero entries
-    mask = np.logical_or(opticFlowX != 0,opticFlowY !=0)
-    
-    X = idx_x[mask]
-    Y = idx_y[mask]
-    U = opticFlowX[mask]
-    V = opticFlowY[mask]
-
-    ax.quiver(X,Y,U,V, scale = 100)
-
-    img = ax.get_figure()
-
-    # returning numpy image
-    return np.asarray(img)
-
-# creating animation
-animation = VideoClip(make_frame, duration = duration)
-
-animation.write_gif("./gifs/test_flow2.gif",fps=FPS)
+save_video(image_folder_from="toyProblem_F22_vectorField", N_IMAGES=63, video_name_to="test")

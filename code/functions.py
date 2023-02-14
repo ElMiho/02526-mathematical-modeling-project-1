@@ -110,6 +110,7 @@ def calculate_Vt_SGF(image_vector: np.ndarray, kernel:np.ndarray = None) -> np.n
     """
 
     # Reshape (depth, height, width) ---> (width, height, depth)
+    image_vector = np.transpose(image_vector, (2,1,0))
     depth, height, width = image_vector.shape
 
     # Generate kernel
@@ -119,7 +120,9 @@ def calculate_Vt_SGF(image_vector: np.ndarray, kernel:np.ndarray = None) -> np.n
                               [1,0,-1],
                               [1,0,-1]] for _ in range(width)])
     
+    # Reshape (width, height, depth) ---> (depth, height, width)
     Vt = scipy.ndimage.convolve(image_vector, kernel, mode="constant", cval=0.0)
+    Vt = np.transpose(Vt, (2,1,0))
 
     return Vt
 
