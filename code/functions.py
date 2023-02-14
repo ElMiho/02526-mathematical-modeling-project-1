@@ -208,8 +208,8 @@ def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.nd
     idx_x,idx_y = np.meshgrid(idx_x, idx_y)
     
     #Ignore all nonzero entries
-    mask1 = np.logical_and(opticFlowX > 0.01,opticFlowY > 0.01)
-    mask2 = np.logical_and(opticFlowX < 10, opticFlowY < 10)
+    mask1 = np.logical_and(np.abs(opticFlowX) > 0.01, np.abs(opticFlowY) > 0.01)
+    mask2 = np.logical_and(np.abs(opticFlowX) < 10, np.abs(opticFlowY) < 10)
     mask = np.logical_and(mask1,mask2)
 
     X = idx_x[mask]
