@@ -57,7 +57,7 @@ def calculate_Vt_LL(flattened_image_vector: np.ndarray, width: int, height: int)
     Vt = np.append(Vt, np.zeros(width*height))
     return Vt
 
-def calculate_Vx_SGF(image_vector: np.ndarray, depth: int, kernel:np.ndarray = None) -> np.ndarray:
+def calculate_Vx_SGF(image_vector: np.ndarray, kernel:np.ndarray = None, mode:str = "nearest") -> np.ndarray:
     """
     Args:
         image_vector (np.ndarray): the vector of images/frames
@@ -69,15 +69,15 @@ def calculate_Vx_SGF(image_vector: np.ndarray, depth: int, kernel:np.ndarray = N
     """
     if kernel is None:
         # Use prewitt kernel as default
-        kernel = np.asarray([[[1,0,-1],
-                              [1,0,-1],
-                              [1,0,-1]] for _ in range(depth)])
+        kernel = np.flip([[1,0,-1],
+                          [1,0,-1],
+                          [1,0,-1]])
     
-    Vx = scipy.ndimage.convolve(image_vector, kernel, mode="constant", cval=0.0)
+    Vx = np.asarray([scipy.ndimage.convolve(image, kernel, mode=mode) for image in image_vector])
 
     return Vx
 
-def calculate_Vy_SGF(image_vector: np.ndarray, depth: int, kernel:np.ndarray = None) -> np.ndarray:
+def calculate_Vy_SGF(image_vector: np.ndarray, kernel:np.ndarray = None, mode:str = "nearest") -> np.ndarray:
     """
     Args:
         image_vector (np.ndarray): the vector of images/frames
@@ -90,13 +90,13 @@ def calculate_Vy_SGF(image_vector: np.ndarray, depth: int, kernel:np.ndarray = N
 
     if kernel is None:
         # Use prewitt kernel as default
-        kernel = np.asarray([[[1,1,1],[0,0,0],[-1,-1,-1]] for _ in range(depth)])
+        kernel = np.flip([[1,1,1],[0,0,0],[-1,-1,-1]])
     
-    Vy = scipy.ndimage.convolve(image_vector, kernel, mode="constant", cval=0.0)
+    Vy = np.asarray([scipy.ndimage.convolve(image, kernel, mode=mode) for image in image_vector])
 
     return Vy
 
-def calculate_Vt_SGF(image_vector: np.ndarray, kernel:np.ndarray = None) -> np.ndarray:
+def calculate_Vt_SGF(image_vector: np.ndarray, kernel:np.ndarray = None, mode:str = "nearest") -> np.ndarray:
 
 
 
@@ -111,17 +111,16 @@ def calculate_Vt_SGF(image_vector: np.ndarray, kernel:np.ndarray = None) -> np.n
 
     # Reshape (depth, height, width) ---> (width, height, depth)
     image_vector = np.transpose(image_vector, (2,1,0))
-    depth, height, width = image_vector.shape
 
     # Generate kernel
     if kernel is None:
         # Use prewitt kernel as default
-        kernel = np.asarray([[[1,0,-1],
-                              [1,0,-1],
-                              [1,0,-1]] for _ in range(width)])
+        kernel = np.flip([[1,0,-1],
+                          [1,0,-1],
+                          [1,0,-1]])
     
-    # Reshape (width, height, depth) ---> (depth, height, width)
-    Vt = scipy.ndimage.convolve(image_vector, kernel, mode="constant", cval=0.0)
+    # Reshape (width, height, depth) ---> input shape
+    Vt = np.asarray([scipy.ndimage.convolve(image, kernel, mode=mode) for image in image_vector])
     Vt = np.transpose(Vt, (2,1,0))
 
     return Vt
@@ -165,8 +164,14 @@ def optical_flow(images: np.ndarray, interval: int, N: int):
         N +=1
     
     Vt = calculate_Vt_SGF(images) #(64,255,255)
-    Vx = calculate_Vx_SGF(images, depth) #(64,255,255)
-    Vy = calculate_Vy_SGF(images, depth) #(64,255,255)
+    Vx = calculate_Vx_SGF(images) #(64,255,255)
+    Vy = calculate_Vy_SGF(images) #(64,255,255)
+
+    # flattened_images = np.reshape(images, (-1,))
+    # Vt = np.reshape(calculate_Vt_LL(flattened_images, width, height), (depth, height, width)) #(64,255,255)
+    # Vx = np.reshape(calculate_Vx_LL(flattened_images, depth, width), (depth, height, width)) #(64,255,255)
+    # Vy = np.reshape(calculate_Vy_LL(flattened_images, depth, width, height), (depth, height, width)) #(64,255,255)
+    
     
     x_sol = np.zeros((depth,height,width)) 
     y_sol = np.zeros((depth,height,width))
@@ -200,8 +205,10 @@ def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.nd
     idx_x,idx_y = np.meshgrid(idx_x, idx_y)
     
     #Ignore all nonzero entries
-    mask = np.logical_or(opticFlowX != 0,opticFlowY !=0)
-    
+    mask1 = np.logical_and(opticFlowX > 0.01,opticFlowY > 0.01)
+    mask2 = np.logical_and(opticFlowX < 10, opticFlowY < 10)
+    mask = np.logical_and(mask1,mask2)
+
     X = idx_x[mask]
     Y = idx_y[mask]
     U = opticFlowX[mask]
@@ -222,7 +229,7 @@ def importImages():
     Returns a 3D-array of images
     """
     images = []
-    for i in range(1, 64):
+    for i in range(1, 65):
         num = str(i) if i >= 10 else "0" + str(i)
         image = PIL.Image.open(f"./toyProblem_F22/frame_{num}.png").convert("L")
         images.append(np.asarray(image, dtype=np.float32)/255)

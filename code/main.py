@@ -25,4 +25,4 @@ for i in range(63):
     functions.plotVectorField(np.asarray(images[i]), opticFlowX[i], opticFlowY[i], i)
 
 
-save_video(image_folder_from="toyProblem_F22_vectorField", N_IMAGES=63, video_name_to="test")
+save_video(image_folder_from="toyProblem_F22_vectorField", N_IMAGES=63, video_name_to="main")
