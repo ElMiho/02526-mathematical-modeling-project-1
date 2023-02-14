@@ -181,8 +181,11 @@ def optical_flow(images: np.ndarray, interval: int, N: int):
                 V_x_N = Vx[frame,j-N//2: j+N//2+1, k-N//2: k+N//2+1]
                 V_y_N = Vy[frame,j-N//2: j+N//2+1, k-N//2: k+N//2+1]
                 V_t_N = Vt[frame,j-N//2: j+N//2+1, k-N//2: k+N//2+1]
-                A,b = return_A_b(V_x_N, V_y_N, V_t_N)
-                opticFlow = solve_least_squares(A, b)
+                if any(np.reshape(V_x_N,(-1,))>0.5) or any(np.reshape(V_y_N,(-1,))>0.5):
+                    A,b = return_A_b(V_x_N, V_y_N, V_t_N)
+                    opticFlow = solve_least_squares(A, b)
+                else:
+                    opticFlow = [0,0]
                 x_sol[frame, j, k] = opticFlow[0]
                 y_sol[frame, j, k] = opticFlow[1]
     return x_sol, y_sol
