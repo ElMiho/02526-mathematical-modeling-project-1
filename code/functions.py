@@ -1,6 +1,7 @@
 # Imports #
 import numpy as np
 import scipy
+import scipy.ndimage
 import matplotlib as plt
 import PIL
 import matplotlib.pyplot as plt
@@ -187,7 +188,7 @@ def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.nd
     Input: frame: An nxm image
                 opticFlowX = x-coordinates of optical flow vectors
                 opticFlowY = y-coordinates of optical flow vectors
-    Return: Plots the opticalflow vectors as a vectorfield on top of the image    
+    Return: Save an image of vectorfield plotted on image     
     """
     #Compute coordiantes for vectors
     height, width = frame.shape
@@ -196,29 +197,29 @@ def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.nd
     idx_x,idx_y = np.meshgrid(idx_x, idx_y)
     
     #Ignore all nonzero entries
-    mask = np.logical_or(opticFlowX != 0,opticFlowY !=0) 
+    mask = np.logical_or(opticFlowX != 0,opticFlowY !=0)
     
     X = idx_x[mask]
     Y = idx_y[mask]
     U = opticFlowX[mask]
     V = opticFlowY[mask]
 
+    
     #Plot
     fig, ax = plt.subplots()
     ax.imshow(frame,cmap="gray")
     ax.quiver(X,Y,U,V, scale = 100)
-    ax.set_title(f"frame {frameNr}")
-    plt.show()
+    # ax.set_title(f"frame {frameNr}")
 
-def te():
-    print("test")
+    plt.savefig(f"./toyProblem_F22_vectorField/{frameNr}.jpg")
+    #plt.show()
 
 def importImages():
     """
     Returns a 3D-array of images
     """
     images = []
-    for i in range(1, 4):
+    for i in range(1, 64):
         num = str(i) if i >= 10 else "0" + str(i)
         image = PIL.Image.open(f"./toyProblem_F22/frame_{num}.png").convert("L")
         images.append(np.asarray(image, dtype=np.float32)/255)
@@ -226,3 +227,5 @@ def importImages():
     # Convert list of images to np format
     images = np.asarray(images)
     return images
+
+
