@@ -176,8 +176,8 @@ def optical_flow(images: np.ndarray, interval: int, N: int):
     x_sol = np.zeros((depth,height,width)) 
     y_sol = np.zeros((depth,height,width))
     for frame in range(depth-1):
-        for j in range(N//2, width, interval):
-            for k in range(N//2, height, interval):
+        for j in range(N//2, height, interval):
+            for k in range(N//2, width, interval):
                 V_x_N = Vx[frame,j-N//2: j+N//2+1, k-N//2: k+N//2+1]
                 V_y_N = Vy[frame,j-N//2: j+N//2+1, k-N//2: k+N//2+1]
                 V_t_N = Vt[frame,j-N//2: j+N//2+1, k-N//2: k+N//2+1]
@@ -203,8 +203,8 @@ def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.nd
     """
     #Compute coordiantes for vectors
     height, width = frame.shape
-    idx_x = np.arange(height)
-    idx_y = np.arange(width)
+    idx_x = np.arange(width)
+    idx_y = np.arange(height)
     idx_x,idx_y = np.meshgrid(idx_x, idx_y)
     
     #Ignore all nonzero entries
@@ -221,10 +221,10 @@ def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.nd
     #Plot
     fig, ax = plt.subplots()
     ax.imshow(frame,cmap="gray")
-    ax.quiver(X,Y,U,V, scale = 100)
+    ax.quiver(X,Y,U,V, scale = 100, color='r')
     # ax.set_title(f"frame {frameNr}")
 
-    plt.savefig(f"./toyProblem_F22_vectorField/{frameNr}.jpg")
+    plt.savefig(f"vanteImages_vectorField/{frameNr}.jpg")
     #plt.show()
 
 def importImages():

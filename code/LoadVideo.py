@@ -1,7 +1,7 @@
 import cv2
 
 
-vidcap = cv2.VideoCapture('./data/vante.mp4')
+vidcap = cv2.VideoCapture('./vante.mp4')
 success,image = vidcap.read()
 count = 0
 while success:
