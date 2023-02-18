@@ -221,11 +221,8 @@ def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.nd
     #Plot
     fig, ax = plt.subplots()
     ax.imshow(frame,cmap="gray")
-    ax.quiver(X,Y,U,V, scale = 100, color='r')
-    # ax.set_title(f"frame {frameNr}")
-
-    plt.savefig(f"vanteImages_vectorField/{frameNr}.jpg")
-    #plt.show()
+    ax.quiver(X,Y,U,V, scale = 100, width=0.01, color='b')
+    plt.savefig(f"tennisImages_vectorField/{frameNr}.jpg")
 
 def importImages():
     """
