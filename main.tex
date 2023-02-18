@@ -10,7 +10,7 @@
 
 
 \title{Optic flow}
-\author{Hugo (s214734) \and Mikael H. Hoffmann (s214753) \and (s211469) \and (s194572)}
+\author{Hugo (s214734) \and Mikael H. Hoffmann (s214753) \and (s211469) \and Jacob Tuxen (s194572)}
 \date{\today}
 
 \begin{document}
@@ -88,21 +88,24 @@ To conclude the optical flow in each pixel is obtained by assuming that each pix
 In image processing an image is expressed as a single matrix for gray scale images and 3 matrices for RGB images. This representation allows us to manipulate the images using linear algebra and other areas of mathematics involving matrices. In the given problem for optical flows the calculations rely on image gradients, Taylor expansions and linear least squares. 
 
 \section{Visualise results - Mikael}
-When running the code with the supplied test video we got
+When running the code with the supplied test video and our custom video we got the following
 
 \begin{figure}[H]
     \begin{subfigure}{.5\textwidth}
         \centering
-        \includegraphics[scale=0.7]{code/toyProblem_F22_vectorField/48.jpg}
+        \includegraphics[scale=0.4]{code/toyProblem_F22_vectorField/48.jpg}
         \caption{The 48th frame with arrows indicating the size and movement of selected pixels.}
-        \label{fig:my_label}
-    \end{subfigure}
-
-    \begin{subfigure}
+        \label{fig:moving-ball}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
         \centering
-        \includegraphics[scale=0.7]
+        \includegraphics[scale=0.4]{code/vanteImages_vectorField/32.jpg}
+        \caption{Placeholder!}
+        \label{fig:custom-video}
     \end{subfigure}
 \end{figure}
+
+In both cases we see that 
 
 \section{Discuss results - }
 
@@ -143,6 +146,15 @@ Which we could also get by passing a filter of all ones over $N$ in $V_x$ and $V
 
 \subsection{Exercise 3}
 \lstinputlisting[language=Python,breaklines=true]{code/exercise_3.py}
+
+\subsection{Various functions}
+\lstinputlisting[language=Python,breaklines=true]{code/functions.py}
+
+\subsection{Video plotter}
+\lstinputlisting[language=Python,breaklines=true]{code/video_plotter.py}
+
+\subsection{Main}
+\lstinputlisting[language=Python,breaklines=true]{code/main.py}
 
 
 \end{document}
