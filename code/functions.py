@@ -194,7 +194,7 @@ def optical_flow(images: np.ndarray, interval: int, N: int):
 # General functions #
 #####################
 
-def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.ndarray, frameNr: int):
+def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.ndarray, frameNr: int, scale: int = 1):
     """
     Input: frame: An nxm image
                 opticFlowX = x-coordinates of optical flow vectors
@@ -221,8 +221,8 @@ def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.nd
     #Plot
     fig, ax = plt.subplots()
     ax.imshow(frame,cmap="gray")
-    ax.quiver(X,Y,U,V, scale = 100, width=0.01, color='b')
-    plt.savefig(f"toyProblem_F22_vectorField/{frameNr}.jpg")
+    ax.quiver(X,Y,U*scale,V*scale, scale = 100, width=0.01, color='b')
+    plt.savefig(f"tennisImages_vectorField/{frameNr}.jpg")
 
 def importImages():
     """
