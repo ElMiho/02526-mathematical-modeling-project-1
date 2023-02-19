@@ -7,20 +7,19 @@
 \usepackage{listings}
 \usepackage{float}
 \usepackage{subcaption}
-
+\usepackage{hyperref}
 
 \title{Optic flow}
-\author{Hugo (s214734) \and Mikael H. Hoffmann (s214753) \and (s211469) \and Jacob Tuxen (s194572)}
+\author{Hugo (s214734) \and Mikael H. Hoffmann (s214753) \and Christian Valentin Kjær (s211469) \and Jacob Tuxen (s194572)}
 \date{\today}
 
 \begin{document}
 
 \maketitle
 
-\section{Introduction (problem and background) - Hugo}
+\section{Introduction (problem and background)}
 Optical flow is a method to determine object motion in video, based on the relative displacement of pixels
-through time in the video. To obtain such a motion prediction, a few strong assumptions are made
-about the subject video, including:
+through time in the video. To obtain such a motion prediction, a few strong assumptions are made about the subject video, including:
 \begin{itemize}
     \item There has been only a small displacement through time
     \item There are no changes in the lighting
@@ -28,19 +27,31 @@ about the subject video, including:
 \end{itemize}
 These assumptions are necessary for applying a mathematical model to the problem of optic flow.
 
-\section{Data and experiments}
-
-
+\section{Data and experiments - Jacob} 
+\subsection{Data and Materials}
+All the data used in this project regarding optical flow, are videos. All the videos used have dimensions \{frames, width, height, depth\}. The depth refers to the layers of color, we captured our videos in color, this means there were 3 layers, RGB. The frames describe how many pictures the video contained, and the width and height correspond to the pixels in the horizontal and vertical direction. 1 Video from the data pool where an animated ball, the others were videos we captured.
+\\\\
+The materials used were:
+\begin{itemize}
+    \item Smartphone for video capturing
+    \item PC for processing video in python
+    \item Movable objects to capture
+\end{itemize}
+\subsection{Experiments and Physical Method}
+The general experiments all follow the same procedure. We wanted to capture a video, and then process the optical flow using the mathematical model described below to detect movement in the video.
+As we have mentioned before optical flow does have some disadvantages, namely no change in lightning and only smaller displacements through time. We sought to make a video with movement that was detectable, and had the same environmental influences throughout the video. This means no changing lighting and a steady camera.
+\\
+Furthermore we also wanted to capture a video where we know that optical flow would not work. This was done in order to see the unreliability of our model. The video we tried to do this was with a shadow moving over a surface. And thoughts were that the optical flow would detect movement even though, no movement was present but only change in lightning.
 
 
 \section{Mathematical model and image processing methodology}
-We start by considering the point $\boldsymbol{p} = [p_x, p_y, p_t]$ and we want to find vector $\boldsymbol{u} = [x, y, 1]$ which represents the movement of the above mentioned pixel in \emph{one} time frame, which is given by
+We start by considering the point $\boldsymbol{p} = [p_x, p_y, p_t]$ and we want to find the vector $\boldsymbol{u} = [x, y, 1]$ which represents the movement of the above mentioned pixel in \emph{one} time frame. If $\boldsymbol{V(p)}$ represents the pixel value then $\boldsymbol{u}$ satisfies 
 
 \begin{equation}\label{eq:initial-equation}
-    \boldsymbol{V(p + u)} - \boldsymbol{V(p)} = 0.
+    \boldsymbol{V(p + u)} = \boldsymbol{V(p)}.
 \end{equation}
 
-Here $\boldsymbol{V}$ represents the pixel value at $\boldsymbol{p}$ - therefore the above is equivalent to brightness constancy constraint. 
+This also means that we are assuming constant brightness.
 
 If the displacement is small then it is possible to  approximate the movement with a first order Taylor expansion
 
@@ -105,11 +116,11 @@ When running the code with the supplied test video and our custom video we got t
     \end{subfigure}
 \end{figure}
 
-In both cases we see that 
+In both cases we see that \dots
 
 \section{Discuss results - }
 
-\section{Conclude - Hugo}
+\section{Conclude}
 A complete python implementation of the Lucas Kanade solution and some of its variations, to the optical flow problem, is created and applied to various optical flow problems. These are used to illustrate both strengths and weeknesses of the Lucas Kanade optical flow solution - see figures ???, ??? and ???.
 % By applying the Lucas Kanade method to optical flow, we have shown the dependency of optical flow to lighting conditions. Moreover 
 
@@ -138,6 +149,10 @@ Which we could also get by passing a filter of all ones over $N$ in $V_x$ and $V
 \newpage
 \appendix
 \section{Code}
+To view the code in a proper folder structure, refer to our github: \url{https://github.com/ElMiho/02526-mathematical-modeling-project-1}
+
+
+
 \subsection{Exercise 1}
 \lstinputlisting[language=Python,breaklines=true]{code/exercise_1.py}
 
