@@ -222,7 +222,7 @@ def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.nd
     fig, ax = plt.subplots()
     ax.imshow(frame,cmap="gray")
     ax.quiver(X,Y,U*scale,V*scale, scale = 100, width=0.01, color='b')
-    plt.savefig(f"rulleboldImages_vectorField/{frameNr}.jpg")
+    plt.savefig(f"toyProblem_F22_vectorField/{frameNr}.jpg")
 
 def importImages():
     """
