@@ -15,7 +15,7 @@ for i in range(80):
     
 # Calculate optic flow for all frames
 interval = 43        # How many optical flow vectors to calculate
-n = 128               # Size of neighboorhood in Lucas-Kanade method
+n = 200               # Size of neighboorhood in Lucas-Kanade method
 opticFlowX, opticFlowY = functions.optical_flow(np.asarray(images), interval, n)
 
 for i in range(70):
