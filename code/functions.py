@@ -181,7 +181,7 @@ def optical_flow(images: np.ndarray, interval: int, N: int):
                 V_x_N = Vx[frame,j-N//2: j+N//2+1, k-N//2: k+N//2+1]
                 V_y_N = Vy[frame,j-N//2: j+N//2+1, k-N//2: k+N//2+1]
                 V_t_N = Vt[frame,j-N//2: j+N//2+1, k-N//2: k+N//2+1]
-                if any(np.abs(np.reshape(V_x_N,(-1,)))>0.25) or any(np.abs(np.reshape(V_y_N,(-1,)))>0.25):
+                if any(np.abs(np.reshape(V_x_N,(-1,)))>0.5) or any(np.abs(np.reshape(V_y_N,(-1,)))>0.5):
                     A,b = return_A_b(V_x_N, V_y_N, V_t_N)
                     opticFlow = solve_least_squares(A, b)
                 else:
@@ -222,7 +222,7 @@ def plotVectorField(frame: np.ndarray, opticFlowX: np.ndarray, opticFlowY: np.nd
     fig, ax = plt.subplots()
     ax.imshow(frame,cmap="gray")
     ax.quiver(X,Y,U,V, scale = 100, width=0.01, color='b')
-    plt.savefig(f"tennisImages_vectorField/{frameNr}.jpg")
+    plt.savefig(f"toyProblem_F22_vectorField/{frameNr}.jpg")
 
 def importImages():
     """
